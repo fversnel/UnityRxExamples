@@ -1,17 +1,17 @@
-using System.Collections.Generic;
-using UnityEngine;
 using System;
+using System.Collections.Generic;
 using System.Reactive.Subjects;
+using UnityEngine;
 using UnityRxExample.Keyboard;
 
 public class UnityRxKeyboard : MonoBehaviour
 {
-    private IEnumerable<KeyCode> _keys;
     private ISubject<KeyboardEvent> _keyEvents;
+    private IEnumerable<KeyCode> _keys;
 
-    void Awake()
+    private void Awake()
     {
-        _keys = Enum.GetValues(typeof(KeyCode)) as KeyCode[];
+        _keys = Enum.GetValues(typeof (KeyCode)) as KeyCode[];
         _keyEvents = new Subject<KeyboardEvent>();
     }
 
@@ -20,9 +20,10 @@ public class UnityRxKeyboard : MonoBehaviour
         return _keyEvents;
     }
 
-	// Update is called once per frame
-	void Update() {
-        foreach (var key in _keys)
+    // Update is called once per frame
+    private void Update()
+    {
+        foreach (KeyCode key in _keys)
         {
             if (Input.GetKeyDown(key))
             {
@@ -33,9 +34,9 @@ public class UnityRxKeyboard : MonoBehaviour
                 _keyEvents.OnNext(new KeyboardEvent(KeyEventType.KeyUp, key));
             }
         }
-	}
+    }
 
-    void OnDestroy()
+    private void OnDestroy()
     {
         _keyEvents.OnCompleted();
     }
